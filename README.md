@@ -21,4 +21,5 @@ We assume you have Docker & Docker compose installed on your machine.
 2. Navigate to the repository directory: `cd db_systems_2_S26`
 3. Install the dependencies: `pip install -r requirements.txt`
 4. Create the `.env` file: `cp .env.example .env` and fill in the required environment variables.
-5. Run the application: `python3 src/main.py `
+5. Create the tables: `prisma db push`
+6. Run the application: `python3 src/main.py `
