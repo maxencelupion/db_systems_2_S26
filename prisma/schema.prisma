@@ -3,11 +3,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum GroupType {
+  CHANNEL
+  GROUP
+}
+
 generator client {
   provider = "prisma-client-py"
 }
 
 model User {
   id        Int      @id @default(autoincrement())
+  username  String
   email     String   @unique
+  // groupsJoined    GroupJoined[]
+}
+
+model Group {
+  id        Int      @id @default(autoincrement())
+  name      String
+  type      GroupType
+  // members   GroupJoined[]
 }
