@@ -25,3 +25,34 @@ model Group {
   type      GroupType
   // members   GroupJoined[]
 }
+
+model Message {
+  id    Int     @id @default(autoincrement())
+  groupId Int
+  senderId  Int
+  content String
+  timestamp DateTime
+  reciverId Int?
+  replyId Int?
+  reciver User? @relation("reciver", fields: [reciverId], references: [id])
+  group group @relation( fields: [groupId], references: [id])
+  sender User @relation("sender", fields: [senderId], references: [id])
+  reply message? @relation( "MessageReplies",fields: [replyId], references: [id])
+  replies message[] @relation("MessageReplies")
+}
+model GroupJoined {
+  id        Int     @id @default(autoincrement())
+  groupId Int
+  userId  Int
+  role Role
+  joinedAt DateTime
+  group group @relation( fields: [groupId], references: [id])
+  user  User   @relation( fields: [userId], references: [id])
+  @@unique([groupId, userId])
+}
+
+enum Role {
+  USER
+  ADMIN
+  OWNER
+} 
