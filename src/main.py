@@ -15,13 +15,14 @@ async def main():
         if cmd == "quit":
             break
         elif cmd == "create":
+            username = input("Username : ")
             email = input("Email : ")
-            user = await db.user.create(data={"email": email})
-            print(f"Created : {user.id} - {user.email}")
+            user = await db.user.create(data={"email": email, "username": username})
+            print(f"Created : {user.id} - {user.username}, {user.email}")
         elif cmd == "list":
             users = await db.user.find_many()
             for u in users:
-                print(f"  [{u.id}] - {u.email}")
+                print(f"  [{u.id}] - {u.username}, {u.email}")
         else:
             print("Unknown command.")
 
