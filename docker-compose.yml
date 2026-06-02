@@ -9,6 +9,7 @@ services:
       MYSQL_PASSWORD: password
     ports:
       - "3306:3306"
+    command: --skip-log-bin
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
       interval: 5s
