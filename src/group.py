@@ -81,7 +81,8 @@ async def group_menu(db: Prisma):
         elif cmd == "list":
             groups = await get_groups(db)
             for g in groups:
-                print(f"[{g.id}] - {g.name}, {g.type}")
+                last_msg_info = f"last message at {g.lastMessageAt}" if g.lastMessageAt else "no messages yet"
+                print(f"[{g.id}] - {g.name}, {g.type}, {last_msg_info}")
                 await list_members(g)
         elif cmd == "add-member":
             await add_member(db)

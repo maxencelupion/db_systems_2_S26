@@ -28,11 +28,12 @@ model User {
 }
 
 model Group {
-  id       Int           @id @default(autoincrement())
-  name     String
-  type     GroupType
-  members  GroupJoined[]
-  messages Message[]
+  id            Int           @id @default(autoincrement())
+  name          String
+  type          GroupType
+  members       GroupJoined[]
+  messages      Message[]
+  lastMessageAt DateTime?     @updatedAt
 }
 
 model Message {
