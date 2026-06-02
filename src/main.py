@@ -1,28 +1,27 @@
 import asyncio
 
 from prisma import Prisma
+from user import user_menu
+from group import group_menu
 
 
 async def main():
     db = Prisma()
 
     await db.connect()
-    print("Commands : create, list, quit")
 
     while True:
+        print("Choose a table: user, message, group or quit")
         cmd = input("\n> ").strip().lower()
 
         if cmd == "quit":
             break
-        elif cmd == "create":
-            username = input("Username : ")
-            email = input("Email : ")
-            user = await db.user.create(data={"email": email, "username": username})
-            print(f"Created : {user.id} - {user.username}, {user.email}")
-        elif cmd == "list":
-            users = await db.user.find_many()
-            for u in users:
-                print(f"  [{u.id}] - {u.username}, {u.email}")
+        elif cmd == "user":
+            await user_menu(db)
+        # elif cmd == "message":
+            # await message_menu(db)
+        elif cmd == "group":
+            await group_menu(db)
         else:
             print("Unknown command.")
 
