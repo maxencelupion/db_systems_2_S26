@@ -8,22 +8,59 @@ enum GroupType {
   GROUP
 }
 
+enum Role {
+  USER
+  ADMIN
+  OWNER
+}
+
 generator client {
   provider = "prisma-client-py"
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String
-  email     String   @unique
-  // groupsJoined    GroupJoined[]
+  id               Int           @id @default(autoincrement())
+  username         String
+  email            String        @unique
+  groupsJoined     GroupJoined[]
+  sentMessages     Message[]     @relation("sender")
+  receivedMessages Message[]     @relation("receiver")
 }
 
 model Group {
-  id        Int      @id @default(autoincrement())
-  name      String
-  type      GroupType
-  // members   GroupJoined[]
+  id            Int           @id @default(autoincrement())
+  name          String
+  type          GroupType
+  members       GroupJoined[]
+  messages      Message[]
+  lastMessageAt DateTime?     @updatedAt
+}
+
+model Message {
+  id         Int       @id @default(autoincrement())
+  content    String
+  timestamp  DateTime
+  sender     User      @relation("sender", fields: [senderId], references: [id])
+  senderId   Int
+  group      Group     @relation(fields: [groupId], references: [id])
+  groupId    Int
+  receiver   User?     @relation("receiver", fields: [receiverId], references: [id])
+  receiverId Int?
+  reply      Message?  @relation("MessageReplies", fields: [replyId], references: [id])
+  replyId    Int?
+  replies    Message[] @relation("MessageReplies")
+}
+
+model GroupJoined {
+  id       Int      @id @default(autoincrement())
+  role     Role
+  joinedAt DateTime
+  group    Group    @relation(fields: [groupId], references: [id])
+  groupId  Int
+  user     User     @relation(fields: [userId], references: [id])
+  userId   Int
+
+  @@unique([groupId, userId])
 }
 
 model Message {
