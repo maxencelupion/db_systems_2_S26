@@ -42,8 +42,8 @@ model Message {
   timestamp  DateTime
   sender     User      @relation("sender", fields: [senderId], references: [id])
   senderId   Int
-  group      Group     @relation(fields: [groupId], references: [id])
-  groupId    Int
+  group      Group?     @relation(fields: [groupId], references: [id])
+  groupId    Int?
   receiver   User?     @relation("receiver", fields: [receiverId], references: [id])
   receiverId Int?
   reply      Message?  @relation("MessageReplies", fields: [replyId], references: [id])
