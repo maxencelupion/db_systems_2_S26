@@ -12,18 +12,31 @@ BEFORE INSERT ON Message
 FOR EACH ROW
 BEGIN
   IF (NEW.content IS NULL OR NEW.content = '') THEN
-     RAISE EXCEPTION 'can not send empty message';
+  SIGNAL SQLSTATE '45000'
+    SET MESSAGE_TEXT = 'can not send empty message';
   END IF;  
 END;
 
 
 CREATE PROCEDURE private_chat(
-IN first_user INT
-IN second_user INT)
+  IN first_user INT,
+  IN second_user INT
+)
 BEGIN
   SELECT *
   FROM Message
   WHERE (senderId = first_user AND receiverId = second_user)
   OR
   (senderId = second_user AND receiverId = first_user);
+END;
+
+CREATE PROCEDURE group_messages(
+  IN target_group INT
+)
+BEGIN
+  SELECT m.id, m.content, m.timestamp, u.username AS sender
+  FROM Message m
+  JOIN User u ON m.senderId = u.id
+  WHERE m.groupId = target_group
+  ORDER BY m.timestamp ASC;
 END;
