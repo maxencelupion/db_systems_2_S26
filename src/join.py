@@ -79,7 +79,7 @@ async def existence_user (db: Prisma):
     else:
         print(f"there is user {user_id} in {group_id} ")
 
-async def group_menu(db: Prisma):
+async def join_menu(db: Prisma):
 
     while True:
         print("[GROUPJOINED] Choose a query: list_groupchats, change_role, owners/admins, users_role, existence_user or quit")

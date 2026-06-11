@@ -8,7 +8,7 @@ async def list_messages(db: Prisma):
     group_id = int(input("group ID: "))
     messages = await db.message.find_many(
        where={"groupId":group_id})
-    if len(messages) > 0: 
+    if len(messages) > 0:
         for m in messages:
          print(f"[{m.id}] {m.content}")
     else:
@@ -33,7 +33,7 @@ async def delete(db: Prisma):
         else:
            print(f"Only the sender can delete the message sent.")
       except Exception as e:
-        print(f"Failed to remove message.")   
+        print(f"Failed to remove message.")
 
 
 async def reply(db: Prisma):
@@ -73,15 +73,17 @@ async def send(db: Prisma):
          group = await db.group.find_unique(
          where={"id": group_id})
          message = await db.message.create(data={"content": content, "senderId": sender_id , "groupId": group_id ,"timestamp": datetime.now()})
-         print(f"user {sender.name} send message in {group.name}")
+         print(f"user {sender.username} send message in {group.name}")
         elif(group_id ==0 and user_id !=0):
+         print('here')
          reciver = await db.user.find_unique(
          where={"id": user_id})
          message = await db.message.create(data={"content": content, "senderId": sender_id , "receiverId": user_id ,"timestamp": datetime.now()})
-         print(f"user  {sender.name} send message to {reciver.name}")
+         print(f"user  {sender.username} send message to {reciver.username}")
         else:
          print(f"Failed to send the message")
     except Exception as e:
+        print(e)
         print(f"Failed to send the message")
 
 
@@ -142,8 +144,8 @@ async def edit_message(db: Prisma):
           )
          print(f"message successfully edited")
         else:
-           print(f"Only the sender can edit the message sent.") 
-    
+           print(f"Only the sender can edit the message sent.")
+
 
 async def message_menu(db: Prisma):
 
