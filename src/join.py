@@ -1,7 +1,9 @@
 from datetime import datetime
+
 from prisma.enums import Role
 
 from prisma import Prisma
+
 
 async def list_groupchats(db: Prisma):
     user_id = int(input("user ID: "))
@@ -9,7 +11,7 @@ async def list_groupchats(db: Prisma):
        where={"userId":user_id},
        orderBy={"joinedAt": "desc"}
        )
-    if len(join) > 0: 
+    if len(join) > 0:
         print(f"user {user_id} ")
         for j in join:
          print(f"joined group {j.groupId} at {j.joinedAt}")
@@ -59,7 +61,7 @@ async def Users_Role (db: Prisma):
      )
      if user is None:
             print("User is not in this group.")
-            return None 
+            return None
      return user.role
     except Exception as e:
         print(f"Failed to find.")
@@ -78,10 +80,15 @@ async def existence_user (db: Prisma):
     else:
         print(f"there is user {user_id} in {group_id} ")
 
-async def join_menu(db: Prisma):
+async def message_group(db: Prisma):
+    group_id = int(input("Group ID: "))
+    messages = await db.query_raw(f"CALL group_messages({group_id});")
+    for message in messages:
+        print(f"Message [{message['f0']}] sent in group {group_id} from {message['f3']} at {message['f2']}: {message['f1']}")
 
+async def join_menu(db: Prisma):
     while True:
-        print("[GROUPJOINED] Choose a query: list_groupchats, change_role, owners/admins, users_role, existence_user or quit")
+        print("[GROUPJOINED] Choose a query: list_groupchats, change_role, owners/admins, users_role, existence_user, message_group or quit")
         cmd = input("\n> ").strip().lower()
 
         if cmd == "quit":
@@ -102,5 +109,7 @@ async def join_menu(db: Prisma):
             print(role)
         elif cmd == "existence_user":
             await existence_user(db)
+        elif cmd == "message_group":
+            await message_group(db)
         else:
             print("Unknown command.")
