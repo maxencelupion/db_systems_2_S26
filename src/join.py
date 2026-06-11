@@ -1,4 +1,3 @@
-import asyncio
 from datetime import datetime
 from prisma.enums import Role
 

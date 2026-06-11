@@ -1,5 +1,3 @@
-import asyncio
-
 from prisma import Prisma
 
 async def list_user(user):
