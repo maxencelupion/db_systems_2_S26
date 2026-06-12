@@ -79,7 +79,6 @@ async def send(db: Prisma):
          message = await db.message.create(data={"content": content, "senderId": sender_id , "groupId": group_id ,"timestamp": datetime.now()})
          print(f"user {sender.username} send {message.content} in {group.name}")
         elif(group_id ==0 and user_id !=0):
-         print('here')
          reciver = await db.user.find_unique(
          where={"id": user_id})
          message = await db.message.create(data={"content": content, "senderId": sender_id , "receiverId": user_id ,"timestamp": datetime.now()})
@@ -154,7 +153,7 @@ async def private_chat(db: Prisma):
     first_id = int(input("first user ID: "))
     second_id = int(input("second user ID: "))
     messages = await db.query_raw(f"CALL private_chat({first_id}, {second_id});")
-     for message in messages:
+    for message in messages:
         print(
             f"Message [{message['f0']}] "
             f"from {message['f3']} "
