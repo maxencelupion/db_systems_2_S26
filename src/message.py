@@ -145,11 +145,23 @@ async def edit_message(db: Prisma):
         else:
            print(f"Only the sender can edit the message sent.")
 
+async def private_chat(db: Prisma):
+    first_id = int(input("first user ID: "))
+    second_id = int(input("second user ID: "))
+    messages = await db.query_raw(f"CALL private_chat({first_id}, {second_id});")
+     for message in messages:
+        print(
+            f"Message [{message['f0']}] "
+            f"from {message['f3']} "
+            f"to {message['f4']} "
+            f"at {message['f2']}: "
+            f"{message['f1']}"
+        )
 
 async def message_menu(db: Prisma):
 
     while True:
-        print("[message] Choose a query: list_messages, edit_message, delete, reply, search_by_sender, send, recent_chat, get_replies or quit")
+        print("[message] Choose a query: list_messages,private_chat, edit_message, delete, reply, search_by_sender, send, recent_chat, get_replies or quit")
         cmd = input("\n> ").strip().lower()
 
         if cmd == "quit":
@@ -170,5 +182,7 @@ async def message_menu(db: Prisma):
             await search_by_sender(db)
         elif cmd == "edit_message":
             await edit_message(db)
+        elif cmd == "private_chat":
+            await private_chat(db)
         else:
             print("Unknown command.")

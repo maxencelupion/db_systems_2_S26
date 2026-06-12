@@ -2,6 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\prisma",
+    "\\prisma\\migrations",
+    "\\prisma\\migrations\\20260601000000_init",
+    "\\prisma\\migrations\\20260602000000_add_update_group_last_message_trigger",
     "\\src"
   ],
   "SelectedNode": "\\prisma\\schema.prisma",

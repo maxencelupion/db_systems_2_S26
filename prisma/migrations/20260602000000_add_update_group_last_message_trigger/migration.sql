@@ -23,11 +23,12 @@ CREATE PROCEDURE private_chat(
   IN second_user INT
 )
 BEGIN
-  SELECT *
-  FROM Message
-  WHERE (senderId = first_user AND receiverId = second_user)
+  SELECT m.id, m.content, m.timestamp, m.senderId, m.reciverId
+  FROM Message m
+  WHERE (m.senderId = first_user AND m.receiverId = second_user)
   OR
-  (senderId = second_user AND receiverId = first_user);
+  (m.senderId = second_user AND m.receiverId = first_user)
+  ORDER BY m.timestamp ASC;
 END;
 
 CREATE PROCEDURE group_messages(
