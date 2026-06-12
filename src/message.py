@@ -67,18 +67,23 @@ async def send(db: Prisma):
     user_id = int(input("reciver ID or 0: "))
     try:
         sender = await db.user.find_unique(
-        where={"id": sender_id})
+        where={"id": sender_id })
+        sender_role = await db.GroupJoined.find_unique(
+        where={"userId": sender_id , "groupId": group_id })
         if(group_id !=0 and user_id ==0):
          group = await db.group.find_unique(
          where={"id": group_id})
+         if(group.type == GroupType.CHANNEL and sender_role.role==Role.USER):
+            print(f"user can not send message in channel")
+            return
          message = await db.message.create(data={"content": content, "senderId": sender_id , "groupId": group_id ,"timestamp": datetime.now()})
-         print(f"user {sender.username} send message in {group.name}")
+         print(f"user {sender.username} send {message.content} in {group.name}")
         elif(group_id ==0 and user_id !=0):
          print('here')
          reciver = await db.user.find_unique(
          where={"id": user_id})
          message = await db.message.create(data={"content": content, "senderId": sender_id , "receiverId": user_id ,"timestamp": datetime.now()})
-         print(f"user  {sender.username} send message to {reciver.username}")
+         print(f"user  {sender.username} send {message.content} to {reciver.username}")
         else:
          print(f"Failed to send the message")
     except Exception as e:
